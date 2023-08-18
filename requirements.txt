@@ -1,2 +1,7 @@
 selenium==4.11.0
 black==23.7.0
+Pillow 
+reportlab
+pytesseract 
+pdf2image 
+PyPDF2
