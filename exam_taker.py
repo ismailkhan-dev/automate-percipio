@@ -13,6 +13,7 @@ import time
 
 # globals
 course_folder = ""
+id = "baee0bdc-1923-4d5f-973c-94e3bfe2e945"
 
 # setup chrome options and chrome driver manager
 chrome_options = Options()
@@ -61,24 +62,10 @@ def input_sso_creds():
         print(f"failure: {name} - {e}")
 
 
-# open journey. Only need if scanning tracks that are complete/incomplete. FUTURE TO-DO. For now, commented out.
-# def open_journey():
-#     name = open_journey.__name__
-#     base_url = td.TestData.BASE_URL
-#     id = td.JourneyTestData.AUTOMATED_TESTING_WITH_SELENIUM
-#     try:
-#         journey_url = base_url + "journey/" + id
-#         print("journey_url", journey_url)
-#         driver.get(journey_url)
-#         print(f"success: {name}")
-#     except Exception as e:
-#         print(f"failure: {name} - {e}")
-
-
 def open_course():
     name = open_course.__name__
     base_url = td.TestData.BASE_URL
-    id = td.CourseTestData.STTDAT_COURSE1
+    global id
     try:
         course_url = base_url + "courses/" + id
         print("course_url", course_url)
@@ -236,8 +223,6 @@ def run_exam_taker():
     open_percipio()
     click_login_btn()
     input_sso_creds()
-    # open_journey() -- Future implementation. Created
-    # open_track() -- Future implementation. NOT created
     open_course()
     select_take_test_pane()
     start_test()

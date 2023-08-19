@@ -21,3 +21,4 @@ class TrackTestData:
 class CourseTestData:
     "SOFTWARE_TESTER_TO_DEVOPS_AUTOMATED_TESTER = STTDAT"
     STTDAT_COURSE1 = "4c52c3bb-74a4-4760-886b-99993695726c"
+    E2E_Testing_Implementation = "94dc3d3e-7776-49ec-b5b4-0a3861505a77"

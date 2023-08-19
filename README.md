@@ -16,6 +16,10 @@ multi_exam_taker.py will screen cap multiple choice questions of all courses in 
 Obviously, multi_exam_taker.py is the more useful script. 
 
 
-## img2pdf.py
+## png2pdf.py
 
-This script will convert all png files in a folder and output a pdf file that is scanned with OCR. The user can search for answers when answering the exam for a pass. 
+This script will convert all png screenshots into a single pdf file. Scanning the pdf for OCR is out of scope for this script. We can use available tools like PDF24 OCR Creator or something similar. 
+
+Save the pdf as output.pdf to the directory. 
+
+Send output.pdf to PDF24 and use OCR service. It will save ocred pdf to the same directory. 

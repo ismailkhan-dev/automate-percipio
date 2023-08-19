@@ -12,7 +12,7 @@ import time
 
 # globals
 course_folder = ""
-TRACK_LINK = "Track 3: QA Lead"
+TRACK_LINK = "Track 4: Automated Tester"
 
 # setup chrome options and chrome driver manager
 chrome_options = Options()
@@ -100,18 +100,38 @@ def open_tracks():
 
         # start most recent course test from track page
         def start_course_test_from_track_page():
-            # Scroll multiple times to load all dynamic content
-            for _ in range(
-                2
-            ):  # Adjust the range based on how many scrolls might be needed
-                scroll_to_bottom_then_top(driver)
+            # Get the total height of the page
+            total_height = driver.execute_script("return document.body.scrollHeight;")
+            # increase the height to ensure it reaches the bottom
+            height_multiplier = 3
+            print("total height of page:", total_height)
+            total_height = total_height * height_multiplier
+
+            # Scroll down slowly
+            for i in range(
+                0, total_height, 5
+            ):  # Here, 5 is the scroll step. Adjust as necessary.
+                driver.execute_script(f"window.scrollTo(0, {i});")
+                time.sleep(0.01)  # Adjust sleep time as necessary
+
+            time.sleep(1)  # Give some time before scrolling back up
+
+            # Scroll back up slowly
+            for i in range(total_height, 0, -5):
+                driver.execute_script(f"window.scrollTo(0, {i});")
+                # time.sleep(0.01)  # Adjust sleep time as necessary
+
+            time.sleep(2)
 
             # find list of courses to take
             find_tests = driver.find_elements(
-                By.XPATH, "//*[contains(text(), 'Take test')]"
+                By.XPATH,
+                "//*[contains(text(), 'Take test')]",
             )
 
-            time.sleep(3)
+            time.sleep(2)
+
+            print("list of all tests found to take: ", len(find_tests))
 
             # click most recent course test
             find_tests[0].click()
