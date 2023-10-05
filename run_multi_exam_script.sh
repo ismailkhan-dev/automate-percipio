@@ -33,7 +33,7 @@ if [ "$os" == "windows" ]; then
   sed -i "s/PLACEHOLDER/$track_text/g" multi_exam_taker.py
 else
   # For Linux and macOS, use the following sed command
-  sed -i'' -e "s/PLACEHOLDER/$track_text/g" multi_exam_taker.py
+  sed -i '' -e "s/PLACEHOLDER/$track_text/g" multi_exam_taker.py
 fi
 
 # Loop to run the Python script n times
@@ -47,5 +47,5 @@ if [ "$os" == "windows" ]; then
   sed -i "s/$track_text/PLACEHOLDER/g" multi_exam_taker.py
 else
   # For Linux and macOS, use the following sed command
-  sed -i'' -e "s/$track_text/PLACEHOLDER/g" multi_exam_taker.py
+  sed -i '' -e "s/$track_text/PLACEHOLDER/g" multi_exam_taker.py
 fi
