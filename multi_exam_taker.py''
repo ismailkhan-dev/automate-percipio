@@ -1,4 +1,3 @@
-# flake8: noqa
 import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -14,7 +13,7 @@ import time
 # globals
 course_folder = ""
 COURSE_ID = td.JourneyTestData.ENTERPRISE_TO_SOFTWARE_DEV
-TRACK_LINK = "Track 1: Enterprise Developer"
+TRACK_LINK = ""
 
 # setup chrome options and chrome driver manager
 chrome_options = Options()
@@ -191,89 +190,96 @@ def start_mc_test():
     # go back to track page to conduct a new test
 
 
-QUESTION_RADIO_BUTTON = (
-    "//*[contains(@class, 'RadioButton---label---1dtPw RadioButton---spaced---aeCFF')]"
-)
-QUESTION_CHECKBOX_BUTTON = "//*[contains(@class, 'Checkbox---checkboxContainer---2Hz1S Checkbox---spaced---1d8os')]"
-
-
-def select_exam_choice():
-    """Selects radio or checkbox answers."""
-    try:
-        radio_buttons = driver.find_elements(By.XPATH, QUESTION_RADIO_BUTTON)
-
-        if radio_buttons:
-            radio_buttons[0].click()
-            return
-
-        checkboxes = driver.find_elements(By.XPATH, QUESTION_CHECKBOX_BUTTON)
-        if checkboxes:
-            checkboxes[0].click()
-            return
-
-        print("No radio or checkbox button is found!")
-    except Exception as e:
-        print("Failed to select choice:", e)
-
-
-def submit_answer():
-    """Submits an answer."""
-    try:
-        submit_btn = driver.find_element(
-            By.XPATH, "//*[contains(text(), 'Submit Answer')]"
-        )
-        submit_btn.click()
-    except Exception as e:
-        print("Failed to submit answer:", e)
-
-
-def take_screenshot(question_num):
-    """Takes a screenshot and saves it."""
-    try:
-        driver.save_screenshot(os.path.join(course_folder, f"answer{question_num}.png"))
-    except Exception as e:
-        print("Failed to take screenshot:", e)
-
-
-def click_next_or_done(question_num):
-    """Clicks on the 'Next Question' or 'Done' button."""
-    try:
-        next_btn = driver.find_element(
-            By.XPATH, "//*[contains(text(), 'Next Question')]"
-        )
-        next_btn.click()
-        print(f"Success: clicked next_question_btn {question_num}")
-    except Exception as no_next_btn_e:
-        try:
-            done_btn = driver.find_element(By.XPATH, "//*[contains(text(), 'Done')]")
-            done_btn.click()
-            print("Exam is done")
-        except Exception as no_done_btn_e:
-            print(
-                f"Failed to click next or done button: {no_next_btn_e} - {no_done_btn_e}"
-            )
-            return False
-    return True
-
-
 # complete multiple choice test and take screenshot
 def take_mc_test_loop():
-    """Main loop for taking the test."""
+    # initalize the question number
     question_num = 0
 
+    # run test logic as many times as there are questions. Applies to course tests and final exams.
     while True:
         try:
             question_num += 1
-            select_exam_choice()
-            submit_answer()
+
+            # function that selects radio and checkbox multiple choice questions for final exam
+            def exam_choice_answer():
+                try:
+                    QUESTION_RADIO_BUTTON = "//*[contains(@class, 'RadioButton---label---1dtPw RadioButton---spaced---aeCFF')]"
+
+                    QUESTION_CHECKBOX_BUTTON = "//*[contains(@class, 'Checkbox---checkboxContainer---2Hz1S Checkbox---spaced---1d8os')]"
+
+                    # find radio button
+                    radio_buttons = driver.find_elements(
+                        By.XPATH, QUESTION_RADIO_BUTTON
+                    )
+
+                    if len(radio_buttons) > 0:  # if radio button found
+                        radio_buttons[0].click()
+                    else:  # if radio buttons not found, look for checkboxes
+                        checkboxes = driver.find_elements(
+                            By.XPATH, QUESTION_CHECKBOX_BUTTON
+                        )
+
+                        if len(checkboxes) > 0:
+                            checkboxes[0].click()
+                        else:
+                            print("No radio button or checkbox button is found!")
+                except Exception as e:
+                    print("failure", e)
+
+            exam_choice_answer()
+
+            # click and submit answer
+            def submit_answer_btn():
+                submit_answer_btn = driver.find_element(
+                    By.XPATH,
+                    "//*[contains(text(), 'Submit Answer')]",
+                )
+
+                submit_answer_btn.click()
+
+            submit_answer_btn()
             time.sleep(2)
+
+            # take screenshot
+            def take_screenshot(question_num):
+                # save screenshot to course folder
+                driver.save_screenshot(
+                    os.path.join(course_folder, f"answer{question_num}.png")
+                )
+
             take_screenshot(question_num)
 
-            if not click_next_or_done(question_num):
-                break
+            # click next question button
+            try:
+
+                def next_question_btn():
+                    # check if "next question" button or "done" button is available
+                    next_question_btn = driver.find_element(
+                        By.XPATH,
+                        "//*[contains(text(), 'Next Question')]",
+                    )
+                    next_question_btn.click()
+
+                next_question_btn()
+
+                print(f"success: next_question_btn {question_num}")
+            except Exception as no_next_btn_e:
+                try:
+                    # Check for the "Done" button
+                    done_button = driver.find_element(
+                        By.XPATH, "//*[contains(text(), 'Done')]"
+                    )
+                    done_button.click()
+                    print("Exam is done")
+
+                except Exception as no_done_btn_e:
+                    print(
+                        f"failure: clicking next_question_btn or done button - {no_next_btn_e} - {no_done_btn_e}"
+                    )
+                    break
 
         except Exception as e:
-            print(f"Failed in take_test:", e)
+            print(f"failure: take_test - {e}")
             break
 
     close_browser()

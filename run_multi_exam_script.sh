@@ -14,8 +14,9 @@ while getopts ":n:t:" opt; do
   esac
 done
 
+
 # Update locators.py with the track text
-sed -i "s/PLACEHOLDER/$track_text/g" multi_exam_taker.py
+sed -i '' "s/PLACEHOLDER/$track_text/g" multi_exam_taker.py
 
 # Loop to run the Python script n times
 for i in $(seq 1 $num_times);
@@ -24,4 +25,4 @@ do
 done
 
 # Revert back to PLACEHOLDER after the loop
-sed -i "s/$track_text/PLACEHOLDER/g" multi_exam_taker.py
+sed -i '' "s/$track_text/PLACEHOLDER/g" multi_exam_taker.py
